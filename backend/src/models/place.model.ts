@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 
-const placeSchema = new mongoose.Schema({
+export interface IPlace {
+    name: string,
+    city: string,
+    country: string,
+    longitude: number,
+    latitude: number,
+    category: string,
+    avgCost: number,
+    rating: number
+}
+
+const placeSchema = new mongoose.Schema<IPlace>({
     name: {
         type: String,
         required: true
@@ -37,6 +48,6 @@ const placeSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const Place = mongoose.model('Place', placeSchema);
+const Place = mongoose.model<IPlace>('Place', placeSchema);
 
 export { Place };

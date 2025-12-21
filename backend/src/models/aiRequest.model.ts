@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 
-const aiRequestSchema = new mongoose.Schema({
+export interface IAIRequest {
+    prompt: string,
+    responseSummary: string,
+    modelUsed: string,
+    tokenUsed: number
+}
+
+const aiRequestSchema = new mongoose.Schema<IAIRequest>({
     prompt: {
         type: String,
         required: true
@@ -21,6 +28,6 @@ const aiRequestSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const AIRequest = mongoose.model('AIRequest', aiRequestSchema);
+const AIRequest = mongoose.model<IAIRequest>('AIRequest', aiRequestSchema);
 
 export { AIRequest };

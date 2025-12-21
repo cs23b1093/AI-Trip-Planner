@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
 
-const itineraryItemSchema = new mongoose.Schema({
+export interface IItineraryItem {
+    type: string,
+    title: string,
+    description: string,
+    latitude: number,
+    longitude: number,
+    startTime: Date,
+    endTime: Date,
+    estimatedCost: number,
+    aiGenerated: boolean
+}
+
+const itineraryItemSchema = new mongoose.Schema<IItineraryItem>({
     type: {
         type: String,
         enum: ['Place', 'Hotel', 'Activity', 'Transport'],
@@ -41,6 +53,6 @@ const itineraryItemSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const ItineraryItem = mongoose.model('ItineraryItem', itineraryItemSchema);
+const ItineraryItem = mongoose.model<IItineraryItem>('ItineraryItem', itineraryItemSchema);
 
 export { ItineraryItem };

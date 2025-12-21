@@ -1,6 +1,13 @@
 import mongoose from "mongoose";
 
-const feedbackSchema = new mongoose.Schema({
+export interface IFeedback {
+    userId: object,
+    feedback: string,
+    rating: number,
+    tripId: object
+}
+
+const feedbackSchema = new mongoose.Schema<IFeedback>({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -17,13 +24,14 @@ const feedbackSchema = new mongoose.Schema({
         required: true
     },
     tripId: {
-        type: String, // Assuming string as per diagram, or could be ObjectId if Trip is a model
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Trip',
         required: true
     }
 }, {
     timestamps: true
 });
 
-const Feedback = mongoose.model('Feedback', feedbackSchema);
+const Feedback = mongoose.model<IFeedback>('Feedback', feedbackSchema);
 
 export { Feedback };
