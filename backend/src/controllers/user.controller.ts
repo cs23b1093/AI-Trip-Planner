@@ -3,11 +3,20 @@ import { User } from "../models/user.model";
 import { asyncHandler } from "../utils/asyncHandler";
 import { ApiError } from "../utils/apiError";
 import { logger } from "../utils/logger";
+import aj from "../config/arcjet";
 
 const registerUser = asyncHandler(async (req: any, res: any, next: any) => {
     logger.info('Registering user...');
     
     try {
+        const decision = await aj.protect(req);
+        if (decision.isDenied()) {
+            return res.status(403).json({
+                error: "Request Denied",
+                reason: decision.reason,
+                id: decision.id
+            })
+        };
         const { name, email, password } = req.body;
     
         const isUserExist = await User.findOne({ email });
@@ -34,6 +43,15 @@ const registerUser = asyncHandler(async (req: any, res: any, next: any) => {
 const loginUser = asyncHandler(async (req: any, res: any, _: any) => {
     logger.info("Logging the user...");
     try {
+        const decision = await aj.protect(req);
+        if (decision.isDenied()) {
+            return res.status(403).json({
+                error: "Request Denied",
+                reason: decision.reason,
+                id: decision.id
+            })
+        };
+
         const { username, password } = req.body;
 
         const userId = req.userId;
@@ -77,6 +95,15 @@ const LogoutUser = asyncHandler (async (req: any, res: any) => {
     logger.info("Logging Out User...");
 
     try {
+        const decision = await aj.protect(req);
+        if (decision.isDenied()) {
+            return res.status(403).json({
+                error: "Request Denied",
+                reason: decision.reason,
+                id: decision.id
+            })
+        };
+
         const userId = req.userId;
 
         const options = {
@@ -107,6 +134,15 @@ const changePassword = asyncHandler(async (req: any, res: any) => {
     logger.info('requesting for change the password...');
 
     try {
+        const decision = await aj.protect(req);
+        if (decision.isDenied()) {
+            return res.status(403).json({
+                error: "Request Denied",
+                reason: decision.reason,
+                id: decision.id
+            })
+        };
+
         const { newPassword } = req.body;
         const userId = req.userId;
 

@@ -10,6 +10,7 @@ import aiRequestRouter from './routes/aiRequest.route';
 import placeRouter from './routes/place.route'
 import tripRouter from "./routes/trip.route";
 import corsSetup from './utils/cors_setup';
+import aj from "./config/arcjet";
 
 dotenv.config({
     path: './.env'
@@ -24,6 +25,19 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
+
+app.use(async (req: any, res: any, next: any) => {
+    const decision = await aj.protect(req);
+
+    if (decision.isDenied()) {
+        return res.status(403).json({
+            error: "Request Denied",
+            reason: decision.reason,
+            id: decision.id
+        })
+    }
+    next();
+})
 
 // Logger middleware
 app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
