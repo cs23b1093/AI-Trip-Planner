@@ -11,6 +11,7 @@ import placeRouter from './routes/place.route'
 import tripRouter from "./routes/trip.route";
 import corsSetup from './utils/cors_setup';
 import aj from "./config/arcjet";
+import { userRouter } from "./routes/user.route";
 
 dotenv.config({
     path: './.env'
@@ -46,6 +47,7 @@ app.use((req: express.Request, res: express.Response, next: express.NextFunction
 });
 
 // Routes declaration
+app.use('/api/v1/user', userRouter);
 app.use("/api/v1/feedback", feedbackRouter);
 app.use("/api/v1/itineraryItem", itineraryItemRouter);
 app.use("/api/v1/aiRequest", aiRequestRouter);
